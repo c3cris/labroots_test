@@ -12,7 +12,7 @@ class TaskManager extends Controller
   /**
    * @Route("/", name="main")
    */
-  public function indexAction(Request $request)
+  public function indexAction()
   {
     $tasks = $this->getDoctrine()->getRepository("AppBundle:Tasks")
         ->findAll();
@@ -38,12 +38,7 @@ class TaskManager extends Controller
     $em->remove($task);
     $em->flush();
 
-    $tasks = $this->getDoctrine()->getRepository("AppBundle:Tasks")
-        ->findAll();
-
-    return $this->render('task_manager/index.html.twig', [
-        'tasks' => $tasks
-    ]);
+    return $this->indexAction();
   }
 
   /**
@@ -63,12 +58,7 @@ class TaskManager extends Controller
     $em->persist($task);
     $em->flush();
 
-    $tasks = $this->getDoctrine()->getRepository("AppBundle:Tasks")
-        ->findAll();
-
-    return $this->render('task_manager/index.html.twig', [
-        'tasks' => $tasks
-    ]);
+    return $this->indexAction();
   }
 
 
@@ -90,12 +80,7 @@ class TaskManager extends Controller
 
     $em->flush();
 
-    $tasks = $this->getDoctrine()->getRepository("AppBundle:Tasks")
-        ->findAll();
-
-    return $this->render('task_manager/index.html.twig', [
-        'tasks' => $tasks
-    ]);
+    return $this->indexAction();
 
   }
 
@@ -117,12 +102,7 @@ class TaskManager extends Controller
     $em->persist($task);
     $em->flush();
 
-    $tasks = $this->getDoctrine()->getRepository("AppBundle:Tasks")
-        ->findAll();
-
-    return $this->render('task_manager/index.html.twig', [
-        'tasks' => $tasks
-    ]);
+    return $this->indexAction();
 
   }
 
