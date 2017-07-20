@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Task Manager{% endblock %}
+
+{% block body %}
+
+
+  <div id="wrapper" class="container-fluid">
+    <div id="container" class="row">
+      <div class="col-sm-10 col-md-8 col-lg-6">
+        <div>
+          <h1>Task Manager</h1>
+        </div>
+
+        <table class="table table-hover table-striped" id="task_table">
+          <tr>
+            <td>Task Name</td>
+            <td>Task Status</td>
+            <td>Change State</td>
+            <td>Edit</td>
+            <td>Delete</td>
+          </tr>
+          {% for key, task in tasks %}
+            <tr>
+              <td>{{ task.name }}</td>
+              <td><span class="info">{{ task.status }}</span></td>
+              <td>
+                <form id="status_form" action="{{ path('task.edit.state') }}" method="post">
+                  <input type="hidden" value="{{ task.id }}" name="id">
+                  <select data-id="{{ task.id }}" name="state">
+                    <option value="">--------</option>
+                    <option value="Incomplete">Incomplete</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Complete">Complete</option>
+                  </select>
+                </form>
+              </td>
+              <td>
+                <button class="btn btn-primary btn-sm edit" data-name="{{ task.name }}" data-id="{{ task.id }}">Edit
+                </button>
+              </td>
+              <td><a class="btn btn-primary btn-sm" href="{{ path('task.delete', {'id': task.id}) }}">Delete</a></td>
+            </tr>
+          {% endfor %}
+        </table>
+        <div>
+          <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#create_task">Create Task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="create_task" tabindex="-1" role="dialog" aria-labelledby="modal_title">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title pull-left" id="modal_title">Create Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="create_form" action="{{ path('task.create') }}" method="post">
+            <label for="name">Task Name:</label>
+            <input type="text" name="name" value="">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary submit">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="edit_task" tabindex="-1" role="dialog" aria-labelledby="modal_title">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title pull-left" id="modal_title">Edit Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="create_form" action="{{ path('task.edit') }}" method="post">
+            <label for="name">Task Name:</label>
+            <input type="text" name="name" value="xxx">
+            <input type="hidden" name="id" value="">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary submit">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+
+  <script>
+      $(function () {
+          $('.modal .submit').click(function (e) {
+              e.preventDefault();
+              $(this).closest('.modal').find('form').submit();
+          });
+
+
+          $('select').change(function (e) {
+              e.preventDefault();
+              if ($(this).val() === "") return;
+              $(this).closest('form').submit();
+          });
+
+          $('.edit').click(function (e) {
+              e.preventDefault();
+              var id = $(this).data('id');
+              var name = $(this).data('name');
+              $('#edit_task input[name="id"]').val(id);
+              $('#edit_task input[name="name"]').val(name);
+              $('#edit_task').modal('show');
+          });
+      });
+  </script>
+
+{% endblock %}
+
+
+
+
+{% block stylesheets %}
+  <style>
+
+    #wrapper {
+      padding: 50px;
+    }
+
+    .info {
+      width: 100px;
+      border: 2px solid #aaa;
+      padding: 4px;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 8px;
+      background-color: #ddd;
+      display: inline-block;
+
+    }
+  </style>
+{% endblock %}
+
+
+
