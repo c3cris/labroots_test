@@ -88,7 +88,6 @@ class TaskManager extends Controller
 
     $task->setName($name);
 
-    $em->persist($task);
     $em->flush();
 
     $tasks = $this->getDoctrine()->getRepository("AppBundle:Tasks")
